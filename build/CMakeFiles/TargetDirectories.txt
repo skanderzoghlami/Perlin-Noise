@@ -1,3 +1,0 @@
-C:/Users/skander/OneDrive/Bureau/Graphics Programming/Perlin Noise/build/CMakeFiles/perlin_noise.dir
-C:/Users/skander/OneDrive/Bureau/Graphics Programming/Perlin Noise/build/CMakeFiles/edit_cache.dir
-C:/Users/skander/OneDrive/Bureau/Graphics Programming/Perlin Noise/build/CMakeFiles/rebuild_cache.dir
