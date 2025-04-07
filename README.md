@@ -6,6 +6,6 @@ This project demonstrates the creation of a 2D Perlin Noise texture and the abil
 ## Iteration 1 : Random Noise
 In the first iteration, the program generates completely random noise, which results in very chaotic, non-smooth textures. These textures are not yet useful for applications that require more controlled, smooth randomness, such as terrain generation or cloud textures.
 
+![output_video (1)](https://github.com/user-attachments/assets/ced9a0ee-5230-41e0-9d60-e04e9fa2298e)
 
-https://github.com/user-attachments/assets/a0aa5330-36d8-4ff7-a71b-c2bba982bff4
 
