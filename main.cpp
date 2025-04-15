@@ -7,13 +7,16 @@
 
 using namespace std;
 
-std::uint32_t whatever_hash(int x, int y, std::uint32_t seed = 0)
+uint32_t whatever_hash(int x, int y, uint32_t seed = 0)
 {
-    uint32_t h = x * 374761393u + y * 668265263u + seed * 362437u;
-    h = (h ^ (h >> 13)) * 1274126177u;
-    return h ^ (h >> 16);
+    uint32_t h = seed;
+    h ^= 0x85ebca6b * x;
+    h ^= 0xc2b2ae35 * y;
+    h ^= h >> 13;
+    h *= 0x27d4eb2d;
+    h ^= h >> 15;
+    return h;
 }
-
 double hashToUnitInterval(int x, int y, std::uint32_t seed = 0)
 {
     return static_cast<double>(whatever_hash(x, y, seed)) / static_cast<double>(UINT32_MAX);
@@ -38,9 +41,9 @@ struct vec2
 double valueNoise(double x, double y, std::size_t seed = 0)
 {
     int x0 = static_cast<int>(floor(x));
-    int x1 = static_cast<int>(ceil(x));
+    int x1 = static_cast<int>(x0 + 1);
     int y0 = static_cast<int>(floor(y));
-    int y1 = static_cast<int>(ceil(y));
+    int y1 = static_cast<int>(y0 + 1);
 
     double sx = smoothstep(x - x0);
     double sy = smoothstep(y - y0);
@@ -59,13 +62,7 @@ void generate_random_texture(int width, const char *filename, int seed = 0)
 {
     double aspect_ratio = 16.0 / 9.0;
     int height = static_cast<int>(width / aspect_ratio);
-    double viewport_height = 2.0;
-    auto viewport_width = viewport_height * (double(width) / height);
-    auto start = vec2(0, 0 );
-    auto horizental_delta = viewport_width / static_cast<double>(width);
-    auto vertical_delta = viewport_height / static_cast<double>(height);
-    auto pixel_00 = vec2(start.x - horizental_delta / 2, start.y - vertical_delta / 2);
-   
+
     fstream image;
     image.open(filename, ios::out);
     image << "P3\n"
@@ -74,9 +71,8 @@ void generate_random_texture(int width, const char *filename, int seed = 0)
     {
         for (int j = 0; j < height; j++)
         {
-            auto pixel = vec2(pixel_00.x + i * horizental_delta, pixel_00.y + j * vertical_delta);
-            double scale = 0.1;
-            double noise = valueNoise(pixel.x * scale, pixel.y * scale, seed);
+            auto scale = 0.2 ;
+            double noise = valueNoise(i * scale, j * scale, seed);
             int r = static_cast<int>(noise * 255);
             int g = r, b = r;
             image << r << " " << g << " " << b << "\n";
