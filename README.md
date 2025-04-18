@@ -3,6 +3,12 @@
 The Perlin Noise Texture Generator is a C++ program that generates random, yet smooth, textures using Perlin Noise. Perlin noise is widely used in computer graphics for generating textures, landscapes, and other natural-looking randomness.
 This project demonstrates the creation of a 2D Perlin Noise texture and the ability to generate it as an image file. The generated textures can be used in various applications like procedural content generation, texture mapping, and simulations of natural phenomena.
 
+
+
+## Iteration 3 : Original Perlin Noise
+
+![output_animation](https://github.com/user-attachments/assets/c9f7c889-930b-42ad-8c94-72f47c113571)
+
 ## Iteration 2 : Value Noise
 Now instead of using just random values between [0,1] for each pixel, we implement Value noise by going trhough each pixel, hashing the 4 values that defines its box and then lerping between them with smoothstep for less linearity.
 
