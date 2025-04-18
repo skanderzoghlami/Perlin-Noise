@@ -6,7 +6,7 @@ This project demonstrates the creation of a 2D Perlin Noise texture and the abil
 ## Iteration 2 : Value Noise
 Now instead of using just random values between [0,1] for each pixel, we implement Value noise by going trhough each pixel, hashing the 4 values that defines its box and then lerping between them with smoothstep for less linearity.
 
-![output_animation](https://github.com/user-attachments/assets/fba7cad1-8c46-4843-8f93-a52756368173)
+![output_animation](https://github.com/user-attachments/assets/e001aead-0181-4bc7-ae12-6dda7ce98e8b)
 
 
 ## Iteration 1 : White Noise
