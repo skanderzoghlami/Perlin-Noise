@@ -3,7 +3,7 @@
 #include <memory>
 #include <random>
 #include <map>
-
+#include <cmath>
 using namespace std;
 
 
@@ -27,6 +27,7 @@ double getRandomValue(unsigned int seed , double start = 0.0 , double end = 1.0)
     return dis(gen);
 }
 
+/* ---------------------- GRID CALCULATION FUNCTIONS ---------------------- */
 map<pair<unsigned int, unsigned int>,double> makeValueNoiseGrid(unsigned int width, unsigned int height){
     map<pair<unsigned int, unsigned int>,double> result ;
     for(unsigned int i = 0 ; i<= height ; ++i ){
@@ -49,12 +50,30 @@ map<pair<unsigned int, unsigned int>,vec2d> makePerlinNoiseGrid(unsigned int wid
     return result;
 } 
 
+map<pair<unsigned int, unsigned int>,vec2d> makeImprovedPerlinNoiseGrid(unsigned int width, unsigned int height){
+    map<pair<unsigned int, unsigned int>,vec2d> result ;
+    for(unsigned int i = 0 ; i<= height ; ++i ){
+         for(unsigned int j = 0 ; j<= height ; ++j ){
+            unsigned int seed = i * 374761393 + j * 668265263 ;
+            double theta = getRandomValue(seed, 0.0, 2.0 * M_PI);
+            vec2d randomVect(cos(theta), sin(theta));
+            result.insert({{i,j}, randomVect  });
+        }
+    }
+    return result;
+} 
+
+/* ---------------------- --------------------------- ---------------------- */
+/* ---------------------- INTERPOLATION FUNCTIONS ---------------------- */
 
 double smoothstep(double a, double b, double t) {
     double s = t * t * (3.0 - 2.0 * t);
     return a + s * (b - a);
 }
-
+double betterSmoothstep(double a, double b, double t) {
+    double s = t * t * t  * (10.0 - 15.0 * t + 6.0 * t * t);
+    return a + s * (b - a);
+}
 
 class Pixel{
     public:
@@ -64,7 +83,7 @@ class Pixel{
         return to_string(r) + ' ' + to_string(g) + ' '+ to_string(b) + ' ';
     }
 };
-
+/* ------------------------------------------------------------------------*/
 
 class Image {
     private:
@@ -119,6 +138,34 @@ class Image {
             }
         }
     }
+    void writeImprovedPerlinNoiseImage(const string& filePath) {
+        map<pair<unsigned int, unsigned int>,vec2d> randomGrid = makeImprovedPerlinNoiseGrid(width,height);
+        fstream strm( filePath, ios::out) ;
+        strm << type + '\n' ;
+        strm << to_string(width) + ' ' + to_string(height) + '\n' ;
+        strm << to_string(maxEncoding) + '\n' ;
+        for (int i =  0 ; i < height ; ++i ){
+            for (int j= 0 ; j< width ; ++j){
+                vec2d center(i+0.5, j+0.5);
+
+                vec2d up_lft_offset   = vecMinus(center , vec2d(i,   j ) );     // (0.5,0.5)
+                vec2d up_right_offset = vecMinus(center , vec2d(i,   j+1));   // (0.5,-0.5)
+                vec2d bot_lft_offset  = vecMinus(center , vec2d(i+1, j));     // (-0.5,0.5)
+                vec2d bot_right_offset= vecMinus(center , vec2d(i+1, j+1));   // (-0.5,-0.5)
+                double up_lft   = dotProduct(randomGrid[{i,j}],   up_lft_offset);
+                double up_right = dotProduct(randomGrid[{i,j+1}], up_right_offset);
+                double bot_lft  = dotProduct(randomGrid[{i+1,j}], bot_lft_offset);
+                double bot_right= dotProduct(randomGrid[{i+1,j+1}], bot_right_offset);
+
+                // No subpixel sampling so t = 0.5
+                double s1 = betterSmoothstep(up_lft, up_right , 0.5);
+                double s2 = betterSmoothstep(bot_lft, bot_right , 0.5);
+                int pixelValue = static_cast<int>((betterSmoothstep( s1, s2 , 0.5) + 1)/2 * 255.0 + 0.5);
+                Pixel p(pixelValue, pixelValue, pixelValue );
+                strm << to_string(p.r) + ' ' ;
+            }
+        }
+    }
 };
 
 
@@ -129,6 +176,8 @@ int main(int, char **)
     unique_ptr<Image> image_ptr( new Image(512,512));
     image_ptr->writeValueNoiseImage("value_noise.pgm");
     image_ptr->writePerlinNoiseImage("perlin_noise.pgm");
+    image_ptr->writeImprovedPerlinNoiseImage("improved_perlin_noise.pgm");
+
     cout << "Texture generated and saved!" << endl;
     return 0;
 }
