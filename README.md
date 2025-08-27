@@ -6,28 +6,27 @@ This project demonstrates the creation of a 2D Perlin Noise texture and the abil
 ## Iteration 4 : Improved Perlin Noise
 Using circle sampling instead of square sampling, and a better smoothstep function.
 
-![output](https://github.com/user-attachments/assets/26444c8c-b60a-4153-a83a-2532c09d9ac6)
+<img src="https://github.com/user-attachments/assets/26444c8c-b60a-4153-a83a-2532c09d9ac6" alt="image" width="400">
 
 
 ## Iteration 3 : Original Perlin Noise
 Perlin noise is now implemented in a better way, we define a grid, generate random vectors in the grid, dot product it with the center, and then interpolate with smoothstep for each pixel.
 
-![output](https://github.com/user-attachments/assets/6b7a74c0-4351-4309-a94e-9772af9e6053)
+<img src="https://github.com/user-attachments/assets/26444c8c-b60a-4153-a83a-2532c09d9ac6" alt="image" width="400">
 
 
 
 ## Iteration 2 : Value Noise
 Value noise is now implemented in a better way, we define a grid, generate random values in the grid, and then interpolate with smoothstep for each pixel.
 
-![output](https://github.com/user-attachments/assets/5bc79fb5-718c-4645-88d3-1e0fae31b06a)
 
+<img src="https://github.com/user-attachments/assets/5bc79fb5-718c-4645-88d3-1e0fae31b06a" alt="image" width="400">
 
 
 
 ## Iteration 1 : White Noise
 In the first iteration, the program generates completely random noise, which results in very chaotic, non-smooth textures. These textures are not yet useful for applications that require more controlled, smooth randomness, such as terrain generation or cloud textures.
 
-![output_animation](https://github.com/user-attachments/assets/c31850eb-903c-4410-a48b-b1354030eccf)
-
+<img src="https://github.com/user-attachments/assets/c31850eb-903c-4410-a48b-b1354030eccf" alt="image" width="400">
 
 
